@@ -1,5 +1,8 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
 public class Percolation {
     private final WeightedQuickUnionUF unionFind;
     private final int n;
@@ -36,43 +39,37 @@ public class Percolation {
      * @param row
      * @param col
      */
-    public void open(int row, int col) {
+    public void open(final int row, final int col) {
         verifyRowAndColumnInRange(row, col);
         if (isOpen(row, col)) {
             return;
         }
         openedSites[toIndex(row, col)] = true;
         numberOfOpenSites++;
-        try {
-            if (isOpen(row - 1, col)) {
-                unionFind.union(toIndex(row, col), toIndex(row - 1, col));
-            }
-        } catch (IndexOutOfBoundsException e) {
-        }
-        try {
-            if (isOpen(row, col + 1)) {
-                unionFind.union(toIndex(row, col), toIndex(row, col + 1));
-            }
-        } catch (IndexOutOfBoundsException e) {
-        }
-        try {
-            if (isOpen(row + 1, col)) {
-                unionFind.union(toIndex(row, col), toIndex(row + 1, col));
-            }
-        } catch (IndexOutOfBoundsException e) {
-        }
-        try {
-            if (isOpen(row, col - 1)) {
-                unionFind.union(toIndex(row, col), toIndex(row, col - 1));
-            }
-        } catch (IndexOutOfBoundsException e) {
-        }
+        Stream.of(
+                Arrays.asList(row, col, row - 1, col),
+                Arrays.asList(row, col, row, col + 1),
+                Arrays.asList(row, col, row + 1, col),
+                Arrays.asList(row, col, row, col - 1))
+                .forEach(rowsAndCols -> {
+                    int row1 = rowsAndCols.get(0);
+                    int col1 = rowsAndCols.get(1);
+                    int neighborRow = rowsAndCols.get(2);
+                    int neighborCol = rowsAndCols.get(3);
+                    if (!rowAndColumnAreOutOfRange(neighborRow, neighborCol) && isOpen(neighborRow, neighborCol)) {
+                        unionFind.union(toIndex(row1, col1), toIndex(neighborRow, neighborCol));
+                    }
+                });
     }
 
     private void verifyRowAndColumnInRange(int row, int col) {
-        if (row < 1 || row > n || col < 1 || col > n) {
+        if (rowAndColumnAreOutOfRange(row, col)) {
             throw new IndexOutOfBoundsException();
         }
+    }
+
+    private boolean rowAndColumnAreOutOfRange(int row, int col) {
+        return row < 1 || row > n || col < 1 || col > n;
     }
 
     private int toIndex(int row, int col) {

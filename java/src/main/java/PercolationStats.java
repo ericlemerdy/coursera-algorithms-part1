@@ -1,6 +1,4 @@
-import static edu.princeton.cs.algs4.StdRandom.uniform;
-import static java.lang.Integer.parseInt;
-import static java.lang.System.out;
+import edu.princeton.cs.algs4.StdRandom;
 
 public class PercolationStats {
 
@@ -15,14 +13,14 @@ public class PercolationStats {
     public PercolationStats(int n, int trials) {
         percolationThreshold = new double[trials];
         for (int trial = 0; trial < trials; trial++) {
-            out.printf("Creating percolation (%d * %d) for trial %d.%n", n, n, trial);
+            System.out.printf("Creating percolation (%d * %d) for trial %d.%n", n, n, trial);
             Percolation percolation = new Percolation(n);
             while (!percolation.percolates() || percolation.numberOfOpenSites() == n) {
-                out.printf(" Does not percolate ? %b.", !percolation.percolates());
-                out.printf(" Number of open sites ? %d.%n", percolation.numberOfOpenSites());
-                int maxRandom = n * n - percolation.numberOfOpenSites() - 1 ;
-                int nextInt = uniform(maxRandom) + 1;
-                out.printf(" Picked a random number %d amongst [1, %d).%n", nextInt, maxRandom);
+                System.out.printf(" Does not percolate ? %b.", !percolation.percolates());
+                System.out.printf(" Number of open sites ? %d.%n", percolation.numberOfOpenSites());
+                int maxRandom = n * n - percolation.numberOfOpenSites() - 1;
+                int nextInt = StdRandom.uniform(maxRandom) + 1;
+                System.out.printf(" Picked a random number %d amongst [1, %d).%n", nextInt, maxRandom);
 
                 if (nextInt < 1 || nextInt >= maxRandom) {
                     throw new RuntimeException();
@@ -52,18 +50,18 @@ public class PercolationStats {
 
                 int row = 1, col = 1;
                 while (!(row == randomRow && col == randomCol)) {
-                    out.printf("  (%d, %d) is not the same than random site (%d, %d).%n", row, col, randomRow, randomCol);
+                    System.out.printf("  (%d, %d) is not the same than random site (%d, %d).%n", row, col, randomRow, randomCol);
                     if (col == n) {
                         row++;
                         col = 0;
                     }
                     col++;
                     if (percolation.isOpen(row, col)) {
-                        out.printf("  Site (%d, %d) is open. Skipping...%n", row, col);
+                        System.out.printf("  Site (%d, %d) is open. Skipping...%n", row, col);
                         nextInt++;
                     }
                 }
-                out.printf("  Opening site (%d, %d).%n%n", randomRow, randomCol);
+                System.out.printf("  Opening site (%d, %d).%n%n", randomRow, randomCol);
                 percolation.open(randomRow, randomCol);
             }
             percolationThreshold[trial] = percolation.numberOfOpenSites() / n * n;
@@ -108,11 +106,11 @@ public class PercolationStats {
      * @param args
      */
     public static void main(String[] args) {
-        int n = parseInt(args[0]);
-        int trials = parseInt(args[1]);
+        int n = Integer.parseInt(args[0]);
+        int trials = Integer.parseInt(args[1]);
         PercolationStats percolationStats = new PercolationStats(n, trials);
-        out.printf("mean                    = %f\n", percolationStats.mean());
-        out.printf("stddev                  = %f\n", percolationStats.stddev());
-        out.printf("95%% confidence interval = [%f, %f]\n", percolationStats.confidenceLo(), percolationStats.confidenceHi());
+        System.out.printf("mean                    = %f\n", percolationStats.mean());
+        System.out.printf("stddev                  = %f\n", percolationStats.stddev());
+        System.out.printf("95%% confidence interval = [%f, %f]\n", percolationStats.confidenceLo(), percolationStats.confidenceHi());
     }
 }
