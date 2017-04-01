@@ -4,10 +4,12 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
+import org.powermock.reflect.Whitebox;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
+import static org.powermock.reflect.Whitebox.invokeMethod;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Percolation.class})
@@ -19,6 +21,8 @@ public class PercolationTest {
     @Test
     public void constructor_should_connect_site_to_virtual_top_site_and_virtual_bottom() throws Exception {
         whenNew(WeightedQuickUnionUF.class).withAnyArguments().thenReturn(unionFind);
+
+        new Percolation(3);
 
         verifyConnectionWithVirtualTopSiteAndVirtualBottomSite();
     }
@@ -37,7 +41,9 @@ public class PercolationTest {
         whenNew(WeightedQuickUnionUF.class).withAnyArguments().thenReturn(unionFind);
         Percolation percolation = new Percolation(3);
 
-        assertEquals(5, percolation.toIndex(2, 2));
+        int toIndex = invokeMethod(percolation, "toIndex", 2, 2);
+
+        assertEquals(5, toIndex);
     }
 
     @Test
@@ -80,7 +86,9 @@ public class PercolationTest {
         whenNew(WeightedQuickUnionUF.class).withAnyArguments().thenReturn(unionFind);
         Percolation percolation = new Percolation(3);
 
-        assertTrue(percolation.isFull(2, 2));
+        percolation.isFull(2, 2);
+
+        verify(unionFind).connected(0, 5);
     }
 
     @Test
