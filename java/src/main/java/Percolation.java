@@ -69,13 +69,13 @@ public class Percolation {
         }
     }
 
-    protected void verifyRowAndColumnInRange(int row, int col) {
+    private void verifyRowAndColumnInRange(int row, int col) {
         if (row < 1 || row > n || col < 1 || col > n) {
             throw new IndexOutOfBoundsException();
         }
     }
 
-    protected int toIndex(int row, int col) {
+    private int toIndex(int row, int col) {
         return (row - 1) * n + col;
     }
 
