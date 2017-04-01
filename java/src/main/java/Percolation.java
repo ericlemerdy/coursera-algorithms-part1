@@ -6,7 +6,7 @@ public class Percolation {
     private final boolean[] openedSites;
     private int numberOfOpenSites = 0;
     private final int virtualBottomSite;
-    private final int virtualTopSite = 0;
+    private final static int VIRTUAL_TOP_SITE = 0;
 
     /**
      * Create n-by-n grid, with all sites blocked
@@ -22,7 +22,7 @@ public class Percolation {
         this.unionFind = unionFind;
         this.virtualBottomSite = n * n + 1;
         for (int topSiteIndex = 1; topSiteIndex < n + 1; topSiteIndex++) {
-            unionFind.union(virtualTopSite, topSiteIndex);
+            unionFind.union(VIRTUAL_TOP_SITE, topSiteIndex);
         }
         for (int bottomSiteIndex = n * n; bottomSiteIndex > n * n - n; bottomSiteIndex--) {
             unionFind.union(virtualBottomSite, bottomSiteIndex);
@@ -116,7 +116,7 @@ public class Percolation {
      * @return <code>true</code> if the system percolates.
      */
     public boolean percolates() {
-        return unionFind.connected(virtualTopSite, virtualBottomSite);
+        return unionFind.connected(VIRTUAL_TOP_SITE, virtualBottomSite);
     }
 
     /**
