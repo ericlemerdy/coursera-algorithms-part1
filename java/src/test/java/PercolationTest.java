@@ -184,15 +184,4 @@ public class PercolationTest {
         new Percolation(3).isFull(2, 4);
     }
 
-    @Test
-    public void should() throws Exception {
-        System.out.println("Row");
-        System.out.println(((1 - 1) / 3) + 1 + " " + (((2 - 1) / 3) + 1) + " " + (((3 - 1) / 3) + 1) + " ");
-        System.out.println(((5 - 1) / 3) + 1 + " " + (((5 - 1) / 3) + 1) + " " + (((6 - 1) / 3) + 1) + " ");
-        System.out.println(((7 - 1) / 3) + 1 + " " + (((8 - 1) / 3) + 1) + " " + (((9 - 1) / 3) + 1) + " ");
-        System.out.println("Col");
-        System.out.println(1 % 3 + " " + 2 % 3 + " " + (3 % 3 == 0 ? 3 : 3 % 3) + " ");
-        System.out.println(4 % 3 + " " + 5 % 3 + " " + (6 % 3 == 0 ? 3 : 6 % 3) + " ");
-        System.out.println(7 % 3 + " " + 8 % 3 + " " + (9 % 3 == 0 ? 3 : 9 % 3) + " ");
-    }
 }
