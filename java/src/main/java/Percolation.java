@@ -1,15 +1,15 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 import java.util.Arrays;
-import java.util.stream.Stream;
+import java.util.List;
 
 public class Percolation {
+    private static final int VIRTUAL_TOP_SITE = 0;
+    private final int virtualBottomSite;
     private final WeightedQuickUnionUF unionFind;
     private final int n;
     private final boolean[] openedSites;
     private int numberOfOpenSites = 0;
-    private final int virtualBottomSite;
-    private final static int VIRTUAL_TOP_SITE = 0;
 
     /**
      * Create n-by-n grid, with all sites blocked
@@ -46,20 +46,19 @@ public class Percolation {
         }
         openedSites[toIndex(row, col)] = true;
         numberOfOpenSites++;
-        Stream.of(
-                Arrays.asList(row, col, row - 1, col),
-                Arrays.asList(row, col, row, col + 1),
-                Arrays.asList(row, col, row + 1, col),
-                Arrays.asList(row, col, row, col - 1))
-                .forEach(rowsAndCols -> {
-                    int row1 = rowsAndCols.get(0);
-                    int col1 = rowsAndCols.get(1);
-                    int neighborRow = rowsAndCols.get(2);
-                    int neighborCol = rowsAndCols.get(3);
-                    if (!rowAndColumnAreOutOfRange(neighborRow, neighborCol) && isOpen(neighborRow, neighborCol)) {
-                        unionFind.union(toIndex(row1, col1), toIndex(neighborRow, neighborCol));
-                    }
-                });
+        List<List<Integer>> neighbours = Arrays.asList(
+                Arrays.asList(row - 1, col),
+                Arrays.asList(row, col + 1),
+                Arrays.asList(row + 1, col),
+                Arrays.asList(row, col - 1)
+        );
+        for (List<Integer> rowsAndCols : neighbours) {
+            int neighborRow = rowsAndCols.get(0);
+            int neighborCol = rowsAndCols.get(1);
+            if (!rowAndColumnAreOutOfRange(neighborRow, neighborCol) && isOpen(neighborRow, neighborCol)) {
+                unionFind.union(toIndex(row, col), toIndex(neighborRow, neighborCol));
+            }
+        }
     }
 
     private void verifyRowAndColumnInRange(int row, int col) {

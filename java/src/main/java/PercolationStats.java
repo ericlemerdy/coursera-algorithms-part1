@@ -50,7 +50,8 @@ public class PercolationStats {
 
                 int row = 1, col = 1;
                 while (!(row == randomRow && col == randomCol)) {
-                    System.out.printf("  (%d, %d) is not the same than random site (%d, %d).%n", row, col, randomRow, randomCol);
+                    System.out.printf("  (%d, %d) is not the same than random site (%d, %d).%n",
+                            row, col, randomRow, randomCol);
                     if (col == n) {
                         row++;
                         col = 0;
@@ -109,8 +110,9 @@ public class PercolationStats {
         int n = Integer.parseInt(args[0]);
         int trials = Integer.parseInt(args[1]);
         PercolationStats percolationStats = new PercolationStats(n, trials);
-        System.out.printf("mean                    = %f\n", percolationStats.mean());
-        System.out.printf("stddev                  = %f\n", percolationStats.stddev());
-        System.out.printf("95%% confidence interval = [%f, %f]\n", percolationStats.confidenceLo(), percolationStats.confidenceHi());
+        System.out.printf("mean                     = %f\n", percolationStats.mean());
+        System.out.printf("stddev                   = %f\n", percolationStats.stddev());
+        System.out.printf("95%% confidence interval = [%f, %f]\n",
+                percolationStats.confidenceLo(), percolationStats.confidenceHi());
     }
 }
