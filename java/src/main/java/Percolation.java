@@ -7,6 +7,7 @@ public class Percolation {
     private static final int VIRTUAL_TOP_SITE = 0;
     private final int virtualBottomSite;
     private final WeightedQuickUnionUF unionFind;
+    private final WeightedQuickUnionUF unionFindForBackwash;
     private final int n;
     private final boolean[] openedSites;
     private int numberOfOpenSites = 0;
@@ -17,15 +18,17 @@ public class Percolation {
      * @param n
      */
     public Percolation(int n) {
-        this(new WeightedQuickUnionUF(n * n + 2), n);
+        this(new WeightedQuickUnionUF(n * n + 2), new WeightedQuickUnionUF(n * n + 2), n);
     }
 
-    private Percolation(WeightedQuickUnionUF unionFind, int n) {
+    private Percolation(WeightedQuickUnionUF unionFind, WeightedQuickUnionUF unionFindForBackwash, int n) {
         this.n = n;
         this.unionFind = unionFind;
+        this.unionFindForBackwash = unionFindForBackwash;
         this.virtualBottomSite = n * n + 1;
         for (int topSiteIndex = 1; topSiteIndex < n + 1; topSiteIndex++) {
             unionFind.union(VIRTUAL_TOP_SITE, topSiteIndex);
+            unionFindForBackwash.union(VIRTUAL_TOP_SITE, topSiteIndex);
         }
         for (int bottomSiteIndex = n * n; bottomSiteIndex > n * n - n; bottomSiteIndex--) {
             unionFind.union(virtualBottomSite, bottomSiteIndex);
@@ -57,6 +60,7 @@ public class Percolation {
             int neighborCol = rowsAndCols.get(1);
             if (!rowAndColumnAreOutOfRange(neighborRow, neighborCol) && isOpen(neighborRow, neighborCol)) {
                 unionFind.union(toIndex(row, col), toIndex(neighborRow, neighborCol));
+                unionFindForBackwash.union(toIndex(row, col), toIndex(neighborRow, neighborCol));
             }
         }
     }
@@ -97,7 +101,7 @@ public class Percolation {
      */
     public boolean isFull(int row, int col) {
         verifyRowAndColumnInRange(row, col);
-        return isOpen(row, col) && unionFind.connected(0, toIndex(row, col));
+        return isOpen(row, col) && unionFindForBackwash.connected(VIRTUAL_TOP_SITE, toIndex(row, col));
     }
 
     /**

@@ -25,9 +25,12 @@ public class PercolationTest {
     @Mock
     private WeightedQuickUnionUF unionFind;
 
+    @Mock
+    private WeightedQuickUnionUF unionFindForBackwash;
+
     @Test
     public void constructor_should_connect_site_to_virtual_top_site_and_virtual_bottom() throws Exception {
-        whenNew(WeightedQuickUnionUF.class).withAnyArguments().thenReturn(unionFind);
+        whenNew(WeightedQuickUnionUF.class).withAnyArguments().thenReturn(unionFind, unionFindForBackwash);
 
         new Percolation(3);
 
@@ -36,8 +39,11 @@ public class PercolationTest {
 
     protected void verifyConnectionWithVirtualTopSiteAndVirtualBottomSite() {
         verify(unionFind).union(0, 1);
+        verify(unionFindForBackwash).union(0, 1);
         verify(unionFind).union(0, 2);
+        verify(unionFindForBackwash).union(0, 2);
         verify(unionFind).union(0, 3);
+        verify(unionFindForBackwash).union(0, 3);
         verify(unionFind).union(10, 7);
         verify(unionFind).union(10, 8);
         verify(unionFind).union(10, 9);
@@ -55,7 +61,7 @@ public class PercolationTest {
 
     @Test
     public void open_should_union_to_neighbors() throws Exception {
-        whenNew(WeightedQuickUnionUF.class).withAnyArguments().thenReturn(unionFind);
+        whenNew(WeightedQuickUnionUF.class).withAnyArguments().thenReturn(unionFind, unionFindForBackwash);
         Percolation percolation = new Percolation(3);
         percolation.open(1, 2);
         percolation.open(2, 3);
@@ -211,7 +217,7 @@ public class PercolationTest {
         assertEquals(true, percolates);
     }
 
-    protected Percolation buildPercolationFromFile(String filename) throws URISyntaxException, IOException {
+    private Percolation buildPercolationFromFile(String filename) throws URISyntaxException, IOException {
         Path inputPath = get(this.getClass().getResource(filename).toURI());
         Percolation percolation = new Percolation(lines(inputPath)
                 .findFirst()
@@ -219,10 +225,19 @@ public class PercolationTest {
                 .get());
         lines(inputPath)
                 .skip(1)
-                .map(s -> stream(s.split(" "))
+                .map(s -> stream(s.trim().split("\\s+"))
                         .map(Integer::valueOf)
                         .collect(toList()))
                 .forEach(pointToOpen -> percolation.open(pointToOpen.get(0), pointToOpen.get(1)));
         return percolation;
+    }
+
+    @Test
+    public void with_large_input_should_not_backwash() throws Exception {
+        Percolation percolation = buildPercolationFromFile("input20.txt");
+
+        boolean full = percolation.isFull(18, 1);
+
+        assertFalse(full);
     }
 }

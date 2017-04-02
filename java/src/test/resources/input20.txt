@@ -1,0 +1,1 @@
+../../../../percolation/percolation-testing/input20.txt
