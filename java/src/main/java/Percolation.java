@@ -88,7 +88,8 @@ public class Percolation {
     }
 
     /**
-     * Is site (row, col) full?
+     * Is site (row, col) full? <br />
+     * A full site is an open site that can be connected to an open site in the top row through a chain of neighbouring.
      *
      * @param row
      * @param col
