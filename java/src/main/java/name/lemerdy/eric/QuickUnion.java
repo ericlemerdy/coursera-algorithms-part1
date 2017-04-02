@@ -30,8 +30,7 @@ public class QuickUnion implements UnionFind {
     }
 
     public int find(int p) {
-
-        return 0;
+        return root(p);
     }
 
     public int count() {

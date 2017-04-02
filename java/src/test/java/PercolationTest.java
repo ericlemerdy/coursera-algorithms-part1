@@ -4,7 +4,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
-import org.powermock.reflect.Whitebox;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
@@ -85,6 +84,8 @@ public class PercolationTest {
     public void a_full_site_should_be_connected_to_the_virtual_top_site() throws Exception {
         whenNew(WeightedQuickUnionUF.class).withAnyArguments().thenReturn(unionFind);
         Percolation percolation = new Percolation(3);
+        percolation.open(1, 2);
+        percolation.open(2, 2);
 
         percolation.isFull(2, 2);
 

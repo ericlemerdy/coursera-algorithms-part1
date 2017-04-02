@@ -97,7 +97,7 @@ public class Percolation {
      */
     public boolean isFull(int row, int col) {
         verifyRowAndColumnInRange(row, col);
-        return unionFind.connected(0, toIndex(row, col));
+        return isOpen(row, col) && unionFind.connected(0, toIndex(row, col));
     }
 
     /**

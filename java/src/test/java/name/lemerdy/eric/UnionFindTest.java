@@ -19,16 +19,13 @@ public class UnionFindTest {
         UnionFind quickUnion = new QuickUnion(10);
         unionNodes(quickUnion);
 
-        assertEquals(quickUnion.find(0), 7);
-        assertEquals(quickUnion.find(1), 7);
-        assertEquals(quickUnion.find(2), 7);
-        assertEquals(quickUnion.find(3), 9);
-        assertEquals(quickUnion.find(4), 9);
-        assertEquals(quickUnion.find(5), 7);
-        assertEquals(quickUnion.find(6), 7);
-        assertEquals(quickUnion.find(7), 7);
-        assertEquals(quickUnion.find(8), 9);
-        assertEquals(quickUnion.find(9), 9);
+        assertEquals(1, quickUnion.find(0));
+        assertEquals(1, quickUnion.find(1));
+        assertEquals(1, quickUnion.find(2));
+        assertEquals(8, quickUnion.find(3));
+        assertEquals(8, quickUnion.find(4));
+        assertEquals(1, quickUnion.find(5));
+        assertEquals(1, quickUnion.find(6));
     }
 
     public void should_print_quick_union_ids() {
