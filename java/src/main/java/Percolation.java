@@ -30,7 +30,7 @@ public class Percolation {
         for (int bottomSiteIndex = n * n; bottomSiteIndex > n * n - n; bottomSiteIndex--) {
             unionFind.union(virtualBottomSite, bottomSiteIndex);
         }
-        openedSites = new boolean[n * n + 1];
+        openedSites = new boolean[n * n + 2];
     }
 
     /**
@@ -113,6 +113,9 @@ public class Percolation {
      * @return <code>true</code> if the system percolates.
      */
     public boolean percolates() {
+        if (n == 1) {
+            return isOpen(1, 1);
+        }
         return unionFind.connected(VIRTUAL_TOP_SITE, virtualBottomSite);
     }
 

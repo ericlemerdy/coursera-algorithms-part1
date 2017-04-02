@@ -5,6 +5,14 @@ import org.mockito.Mock;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+
+import static java.nio.file.Files.lines;
+import static java.nio.file.Paths.get;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.toList;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.whenNew;
@@ -185,4 +193,36 @@ public class PercolationTest {
         new Percolation(3).isFull(2, 4);
     }
 
+    @Test
+    public void should_not_percolates_by_default() throws Exception {
+        Percolation percolation = new Percolation(1);
+
+        boolean percolates = percolation.percolates();
+
+        assertEquals(false, percolates);
+    }
+
+    @Test
+    public void with_n_1_and_site_open_should_percolate() throws IOException, URISyntaxException {
+        Percolation percolation = buildPercolationFromFile("input1.txt");
+
+        boolean percolates = percolation.percolates();
+
+        assertEquals(true, percolates);
+    }
+
+    protected Percolation buildPercolationFromFile(String filename) throws URISyntaxException, IOException {
+        Path inputPath = get(this.getClass().getResource(filename).toURI());
+        Percolation percolation = new Percolation(lines(inputPath)
+                .findFirst()
+                .map(Integer::valueOf)
+                .get());
+        lines(inputPath)
+                .skip(1)
+                .map(s -> stream(s.split(" "))
+                        .map(Integer::valueOf)
+                        .collect(toList()))
+                .forEach(pointToOpen -> percolation.open(pointToOpen.get(0), pointToOpen.get(1)));
+        return percolation;
+    }
 }
