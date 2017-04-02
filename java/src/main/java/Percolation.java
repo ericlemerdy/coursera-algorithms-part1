@@ -22,6 +22,9 @@ public class Percolation {
     }
 
     private Percolation(WeightedQuickUnionUF unionFind, WeightedQuickUnionUF unionFindForBackwash, int n) {
+        if (n <= 0) {
+            throw new IllegalArgumentException();
+        }
         this.n = n;
         this.unionFind = unionFind;
         this.unionFindForBackwash = unionFindForBackwash;

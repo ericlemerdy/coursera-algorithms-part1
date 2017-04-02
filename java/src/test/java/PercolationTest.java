@@ -49,6 +49,21 @@ public class PercolationTest {
         verify(unionFind).union(10, 9);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void impossible_to_create_a_percolation_with_n_is_minus_10() throws Exception {
+        new Percolation(-10);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void impossible_to_create_a_percolation_with_n_is_minus_1() throws Exception {
+        new Percolation(-1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void impossible_to_create_a_percolation_with_n_is_zero() throws Exception {
+        new Percolation(0);
+    }
+
     @Test
     public void shuold_convert_row_col_to_index() throws Exception {
         whenNew(WeightedQuickUnionUF.class).withAnyArguments().thenReturn(unionFind);
