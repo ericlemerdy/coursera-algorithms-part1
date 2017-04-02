@@ -26,17 +26,9 @@ public class UnionFindTest {
         assertEquals(8, quickUnion.find(4));
         assertEquals(1, quickUnion.find(5));
         assertEquals(1, quickUnion.find(6));
-    }
-
-    public void should_print_quick_union_ids() {
-        UnionFind quickUnion = new QuickUnion(10);
-        unionNodes(quickUnion);
-
-        String expected = "" +
-                "0 1 2 3 4 5 6 7 8 9 \n" +
-                "1 1 1 8 3 0 5 1 8 8 ";
-        // "{0 1 2 5 6 7} {3 4 8 9}"
-        assertEquals(expected, quickUnion.toString());
+        assertEquals(1, quickUnion.find(7));
+        assertEquals(8, quickUnion.find(8));
+        assertEquals(8, quickUnion.find(9));
     }
 
     @Test
