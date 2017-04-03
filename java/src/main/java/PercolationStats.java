@@ -1,4 +1,5 @@
 import edu.princeton.cs.algs4.StdRandom;
+import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
 
@@ -61,18 +62,14 @@ public class PercolationStats {
      * @return sample mean of percolation threshold
      */
     public double mean() {
-        double sum = 0d;
-        for (int i = 0; i < percolationThreshold.length; i++) {
-            sum += percolationThreshold[i];
-        }
-        return sum / percolationThreshold.length;
+        return StdStats.mean(percolationThreshold);
     }
 
     /**
      * @return sample standard deviation of percolation threshold
      */
     public double stddev() {
-        return 0d;
+        return StdStats.stddev(percolationThreshold);
     }
 
     /**
