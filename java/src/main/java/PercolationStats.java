@@ -12,6 +12,12 @@ public class PercolationStats {
      * @param trials
      */
     public PercolationStats(int n, int trials) {
+        if (n <= 0) {
+            throw new IllegalArgumentException();
+        }
+        if (trials <= 0) {
+            throw new IllegalArgumentException();
+        }
         percolationThreshold = new double[trials];
         for (int trial = 0; trial < trials; trial++) {
             Percolation percolation = new Percolation(n);
