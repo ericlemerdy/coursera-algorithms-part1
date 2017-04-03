@@ -24,29 +24,8 @@ public class PercolationStats {
             while (!percolation.percolates() || percolation.numberOfOpenSites() == n) {
                 int maxRandom = n * n - percolation.numberOfOpenSites() - 1;
                 int nextInt = StdRandom.uniform(maxRandom) + 1;
-                if (nextInt < 1 || nextInt >= maxRandom) {
-                    throw new RuntimeException();
-                }
                 int randomRow = ((nextInt - 1) / n) + 1;
                 int randomCol = nextInt % n == 0 ? n : nextInt % n;
-                if ((nextInt == 1 || nextInt == 2 || nextInt == 3) && randomRow != 1) {
-                    throw new RuntimeException();
-                }
-                if ((nextInt == 4 || nextInt == 5 || nextInt == 6) && randomRow != 2) {
-                    throw new RuntimeException();
-                }
-                if ((nextInt == 7 || nextInt == 8 || nextInt == 9) && randomRow != 3) {
-                    throw new RuntimeException();
-                }
-                if ((nextInt == 1 || nextInt == 4 || nextInt == 7) && randomCol != 1) {
-                    throw new RuntimeException();
-                }
-                if ((nextInt == 2 || nextInt == 5 || nextInt == 8) && randomCol != 2) {
-                    throw new RuntimeException();
-                }
-                if ((nextInt == 3 || nextInt == 6 || nextInt == 9) && randomCol != 3) {
-                    throw new RuntimeException();
-                }
                 int row = 1, col = 1;
                 while (!(row == randomRow && col == randomCol)) {
                     if (col == n) {
