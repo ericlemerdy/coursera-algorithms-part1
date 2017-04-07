@@ -3,7 +3,13 @@ import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
 
-    private final double[] percolationThreshold;
+    private final double mean;
+
+    private final double confidence;
+
+    private double[] percolationThreshold;
+
+    private double stddev;
 
     /**
      * perform trials independent experiments on an n-by-n grid
@@ -21,54 +27,54 @@ public class PercolationStats {
         percolationThreshold = new double[trials];
         for (int trial = 0; trial < trials; trial++) {
             Percolation percolation = new Percolation(n);
-            while (!percolation.percolates() || percolation.numberOfOpenSites() == n) {
+            while (!percolation.percolates()) {
                 int maxRandom = n * n - percolation.numberOfOpenSites() - 1;
-                int nextInt = StdRandom.uniform(maxRandom) + 1;
-                int randomRow = ((nextInt - 1) / n) + 1;
-                int randomCol = nextInt % n == 0 ? n : nextInt % n;
-                int row = 1, col = 1;
-                while (!(row == randomRow && col == randomCol)) {
-                    if (col == n) {
-                        row++;
-                        col = 0;
-                    }
-                    col++;
-                    if (percolation.isOpen(row, col)) {
-                        nextInt++;
-                    }
+                int nextInt = StdRandom.uniform(maxRandom);
+                int row = 1, col = 0;
+                for (int i = 0; i <= nextInt; i++) {
+                    do {
+                        col++;
+                        if (col > n) {
+                            col = 1;
+                            row++;
+                        }
+                    } while (percolation.isOpen(row, col));
                 }
-                percolation.open(randomRow, randomCol);
+                percolation.open(row, col);
             }
-            percolationThreshold[trial] = percolation.numberOfOpenSites() / n * n;
+            percolationThreshold[trial] = (double) percolation.numberOfOpenSites() / (n * n);
         }
+        mean = StdStats.mean(percolationThreshold);
+        stddev = StdStats.stddev(percolationThreshold);
+        confidence = ((1.96f * stddev()) / Math.sqrt(trials));
     }
 
     /**
      * @return sample mean of percolation threshold
      */
     public double mean() {
-        return StdStats.mean(percolationThreshold);
+        return mean;
     }
 
     /**
      * @return sample standard deviation of percolation threshold
      */
     public double stddev() {
-        return StdStats.stddev(percolationThreshold);
+        return stddev;
     }
 
     /**
      * @return low  endpoint of 95% confidence interval
      */
     public double confidenceLo() {
-        return 0d;
+        return mean - confidence;
     }
 
     /**
      * @return high endpoint of 95% confidence interval
      */
     public double confidenceHi() {
-        return 0d;
+        return mean + confidence;
     }
 
     /**
@@ -80,8 +86,8 @@ public class PercolationStats {
         int n = Integer.parseInt(args[0]);
         int trials = Integer.parseInt(args[1]);
         PercolationStats percolationStats = new PercolationStats(n, trials);
-        System.out.printf("mean                     = %f\n", percolationStats.mean());
-        System.out.printf("stddev                   = %f\n", percolationStats.stddev());
+        System.out.printf("mean                    = %f\n", percolationStats.mean());
+        System.out.printf("stddev                  = %f\n", percolationStats.stddev());
         System.out.printf("95%% confidence interval = [%f, %f]\n",
                 percolationStats.confidenceLo(), percolationStats.confidenceHi());
     }
