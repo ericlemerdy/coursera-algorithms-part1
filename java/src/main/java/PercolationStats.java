@@ -27,8 +27,16 @@ public class PercolationStats {
         percolationThreshold = new double[trials];
         for (int trial = 0; trial < trials; trial++) {
             Percolation percolation = new Percolation(n);
+            int numberOfOpenSites = 0;
+            boolean[][] openSites = new boolean[n][];
+            for (int i = 0; i < n; i++) {
+                openSites[i] = new boolean[n];
+                for (int j = 0; j < n; j++) {
+                    openSites[i][j] = false;
+                }
+            }
             while (!percolation.percolates()) {
-                int maxRandom = n * n - percolation.numberOfOpenSites() - 1;
+                int maxRandom = n * n - numberOfOpenSites - 1;
                 int nextInt = StdRandom.uniform(maxRandom);
                 int row = 1, col = 0;
                 for (int i = 0; i <= nextInt; i++) {
@@ -38,11 +46,13 @@ public class PercolationStats {
                             col = 1;
                             row++;
                         }
-                    } while (percolation.isOpen(row, col));
+                    } while (openSites[row - 1][col - 1]);
                 }
                 percolation.open(row, col);
+                openSites[row - 1][col - 1] = true;
+                numberOfOpenSites++;
             }
-            percolationThreshold[trial] = (double) percolation.numberOfOpenSites() / (n * n);
+            percolationThreshold[trial] = (double) numberOfOpenSites / (n * n);
         }
         mean = StdStats.mean(percolationThreshold);
         stddev = StdStats.stddev(percolationThreshold);
